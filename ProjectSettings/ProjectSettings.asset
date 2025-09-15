@@ -842,8 +842,8 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: "Visualizaci\xF3n_Arquitectura_ProcesoVisual"
-  metroPackageVersion: 
+  metroPackageName: 
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -851,7 +851,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: "Visualizaci\xF3n_Arquitectura_ProcesoVisual"
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: "Visualizaci\xF3n_Arquitectura_ProcesoVisual"
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
@@ -918,7 +918,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
-  activeInputHandler: 1
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: b1ada3a3-67bb-49aa-aeeb-4fcfbe3d5769
   framebufferDepthMemorylessMode: 0
