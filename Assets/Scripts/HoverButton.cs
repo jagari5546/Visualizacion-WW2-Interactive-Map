@@ -3,10 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class HoverButton : MonoBehaviour,
-    IPointerEnterHandler, IPointerExitHandler,
-    IPointerDownHandler, IPointerUpHandler,
-    IPointerClickHandler
+public class HoverButton : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private Button button;           // Se autollenará si está vacío
@@ -19,8 +16,8 @@ public class HoverButton : MonoBehaviour,
     [SerializeField] private string highlightedHex = "#FFD54FFF";
     [SerializeField] private string pressedHex     = "#FFB300FF";
 
-    [Header("Scene")]
-    [SerializeField] private string sceneToLoad = "YourSceneName";
+    //[Header("Scene")]
+    //[SerializeField] private string sceneToLoad = "YourSceneName";
 
     private bool _isPointerOver;
 
@@ -59,13 +56,13 @@ public class HoverButton : MonoBehaviour,
         ApplyColor(_isPointerOver ? highlightedHex : normalHex);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    /*public void OnPointerClick(PointerEventData eventData)
     {
         if (!string.IsNullOrEmpty(sceneToLoad))
             SceneManager.LoadScene(sceneToLoad);
         else
             Debug.LogWarning("HoverButton: 'sceneToLoad' está vacío en " + gameObject.name);
-    }
+    }*/
 
     private void ApplyColor(string hex)
     {
@@ -83,5 +80,10 @@ public class HoverButton : MonoBehaviour,
     {
         if (toAnimate == null) return;
         // TODO: guardar tamaño/posición originales y animar a centro/tamaño mayor.
+    }
+    
+    public void SceneChange(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }
