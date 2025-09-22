@@ -1,89 +1,47 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class HoverButton : MonoBehaviour
+[DisallowMultipleComponent]
+[RequireComponent(typeof(Selectable))]
+public class CopyTintToText : MonoBehaviour
 {
-    [Header("Refs")]
-    [SerializeField] private Button button;           // Se autollenará si está vacío
-    [SerializeField] private Graphic buttonGraphic;   // Por defecto, targetGraphic del botón
-    [SerializeField] private Graphic textGraphic;     // <- Asigna AQUÍ el texto de ESTE botón
-    [SerializeField] private RectTransform toAnimate; // Placeholder animación (opcional)
+    [Header("Fuentes")]
+    [SerializeField] private Graphic sourceGraphic; // si lo dejas vacío usa el targetGraphic del Selectable
+    [Header("Destino")]
+    [SerializeField] private Graphic textGraphic;   // Text o TextMeshProUGUI
+    [SerializeField] private bool copyAlpha = true; // si no quieres copiar alpha, pon false
 
-    [Header("Colors (hex)")]
-    [SerializeField] private string normalHex      = "#FFFFFFFF";
-    [SerializeField] private string highlightedHex = "#FFD54FFF";
-    [SerializeField] private string pressedHex     = "#FFB300FF";
-
-    //[Header("Scene")]
-    //[SerializeField] private string sceneToLoad = "YourSceneName";
-
-    private bool _isPointerOver;
+    Color _last;
 
     void Awake()
     {
-        if (button == null) button = GetComponent<Button>();
-        if (buttonGraphic == null && button != null) buttonGraphic = button.targetGraphic;
-
-        if (button != null) button.transition = Selectable.Transition.None;
-
-        ApplyColor(normalHex);
+        var sel = GetComponent<Selectable>();
+        if (sourceGraphic == null) sourceGraphic = sel.targetGraphic;
+        if (sourceGraphic != null) _last = sourceGraphic.color;
     }
 
-    // ---------- Hover ----------
-    public void OnPointerEnter(PointerEventData eventData)
+    void LateUpdate()
     {
-        _isPointerOver = true;
-        ApplyColor(highlightedHex);
-    }
+        if (sourceGraphic == null || textGraphic == null) return;
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _isPointerOver = false;
-        ApplyColor(normalHex);
-    }
-
-    // ---------- Press ----------
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        ApplyColor(pressedHex);
-        AnimateFocusPlaceholder(); // solo stub
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        ApplyColor(_isPointerOver ? highlightedHex : normalHex);
-    }
-
-    /*public void OnPointerClick(PointerEventData eventData)
-    {
-        if (!string.IsNullOrEmpty(sceneToLoad))
-            SceneManager.LoadScene(sceneToLoad);
-        else
-            Debug.LogWarning("HoverButton: 'sceneToLoad' está vacío en " + gameObject.name);
-    }*/
-
-    private void ApplyColor(string hex)
-    {
-        if (!ColorUtility.TryParseHtmlString(hex, out var c))
+        var c = sourceGraphic.color;
+        if (!copyAlpha) c.a = textGraphic.color.a;
+        if (!NearlyEqual(c, _last))
         {
-            Debug.LogWarning($"HoverButton: Hex inválido '{hex}'. Usando blanco.");
-            c = Color.white;
+            textGraphic.color = c;
+            _last = c;
         }
-        if (buttonGraphic != null) buttonGraphic.color = c;
-        if (textGraphic   != null) textGraphic.color   = c;
     }
 
-    // Placeholder para tu animación de “agrandar y centrar”
-    private void AnimateFocusPlaceholder()
+    static bool NearlyEqual(Color a, Color b, float e = 0.001f)
     {
-        if (toAnimate == null) return;
-        // TODO: guardar tamaño/posición originales y animar a centro/tamaño mayor.
+        return Mathf.Abs(a.r-b.r)<e && Mathf.Abs(a.g-b.g)<e &&
+               Mathf.Abs(a.b-b.b)<e && Mathf.Abs(a.a-b.a)<e;
     }
-    
-    public void SceneChange(string sceneName)
+
+    public void SceneChange(string SceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(SceneName);
     }
 }
